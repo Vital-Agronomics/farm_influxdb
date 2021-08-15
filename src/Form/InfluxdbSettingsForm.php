@@ -4,6 +4,8 @@ namespace Drupal\farm_influxdb\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\farm_influxdb\InfluxdbServerClient;
+use InfluxDB2\Service\OrganizationsService;
 
 /**
  * Configuration form for influxdb settings.
@@ -138,6 +140,19 @@ class InfluxdbSettingsForm extends ConfigFormBase {
       ];
 
       // Add button to remove the server.
+      $form['servers'][$delta]['test'] = [
+        '#type' => 'submit',
+        '#value' => $this->t('Test server'),
+        '#name' => "test-server-$delta",
+        '#submit' => ['::testServer'],
+        '#ajax' => [
+          'callback' => '::updateServers',
+          'wrapper' => 'servers-fieldset-wrapper',
+        ],
+        '#tree' => FALSE,
+      ];
+
+      // Add button to remove the server.
       $form['servers'][$delta]['remove'] = [
         '#type' => 'submit',
         '#value' => $this->t('Remove server'),
@@ -187,6 +202,50 @@ class InfluxdbSettingsForm extends ConfigFormBase {
     // Update the form.
     $form_state->setValue('servers', $servers);
     $form_state->setRebuild();
+  }
+
+  /**
+   * Submit handler to test a server configuration.
+   *
+   * @param array $form
+   *   The form array.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   */
+  public function testServer(array &$form, FormStateInterface $form_state) {
+
+    // Determine which server to test.
+    $parents = $form_state->getTriggeringElement()['#array_parents'];
+    $delta = $parents[1];
+
+    // Remove the delta from the existing servers.
+    $servers = $form_state->getValue('servers');
+    $test_server = $servers[$delta];
+
+    // Try and query the organizations on the server.
+    // The $client->health() method only works for OSS, not influx cloud.
+    $client = new InfluxdbServerClient($test_server);
+    $org_service = $client->createService(OrganizationsService::class);
+    try {
+      $org_service->getOrgs()->getOrgs();
+      $this->messenger()->addMessage($this->t(
+        '@server_name (@server_id): success',
+        [
+          '@server_name' => $test_server['label'],
+          '@server_id' => $test_server['id'],
+        ]
+      ));
+    }
+    catch (\Exception $e) {
+      $this->messenger()->addError($this->t(
+        '@server_name (@server_id): @reason',
+        [
+          '@server_name' => $test_server['label'],
+          '@server_id' => $test_server['id'],
+          '@reason' => $e->getMessage(),
+        ]
+      ));
+    }
   }
 
   /**
