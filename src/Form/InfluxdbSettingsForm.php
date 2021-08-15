@@ -158,6 +158,9 @@ class InfluxdbSettingsForm extends ConfigFormBase {
         '#value' => $this->t('Remove server'),
         '#submit' => ['::removeServer'],
         '#name' => "remove-server-$delta",
+        '#attributes' => [
+          'class' => ['button--danger'],
+        ],
         '#ajax' => [
           'callback' => '::updateServers',
           'wrapper' => 'servers-fieldset-wrapper',
