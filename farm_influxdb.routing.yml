@@ -1,0 +1,7 @@
+farm_influxdb.settings:
+  path: 'farm/settings/influxdb'
+  defaults:
+    _form: '\Drupal\farm_influxdb\Form\InfluxdbSettingsForm'
+    _title: 'Influxdb Settings'
+  requirements:
+    _permission: 'administer farm influxdb'

@@ -1,0 +1,5 @@
+farm_influxdb.settings:
+  base_route: farm_settings.settings_page
+  route_name: farm_influxdb.settings
+  title: 'Influxdb'
+  weight: 7
