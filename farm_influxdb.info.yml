@@ -1,0 +1,7 @@
+name: Farm Influxdb
+description: Integrates data streams with influx DB.
+type: module
+package: farmOS Contrib
+core_version_requirement: ^9
+dependencies:
+  - farm:data_stream
