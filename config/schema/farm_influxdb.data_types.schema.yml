@@ -1,0 +1,30 @@
+# Data types for farm_influxdb.
+
+farm_influxdb_server:
+  type: mapping
+  label: 'Influxdb server'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: string
+      label: 'Server label'
+    url:
+      type: string
+      label: 'URL'
+    token:
+      type: string
+      label: 'Token'
+    bucket:
+      type: string
+      label: 'Bucket'
+    org:
+      type: string
+      label: 'Org'
+    verifySSL:
+      type: boolean
+      label: 'Verify SSL'
+    timeout:
+      type: integer
+      lable: 'Timeout'

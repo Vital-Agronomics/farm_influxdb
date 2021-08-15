@@ -1,0 +1,12 @@
+# Schema definition for farm_influxdb.
+
+farm_influxdb.settings:
+  type: config_object
+  label: 'Influxdb Settings'
+  mapping:
+    servers:
+      type: sequence
+      label: 'Influxdb servers'
+      description: 'A list of Influxdb server connection info.'
+      sequence:
+        type: farm_influxdb_server
