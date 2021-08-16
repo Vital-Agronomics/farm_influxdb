@@ -10,3 +10,6 @@ farm_influxdb.settings:
       description: 'A list of Influxdb server connection info.'
       sequence:
         type: farm_influxdb_server
+
+data_stream.type.*.third_party.farm_influxdb:
+  type: farm_influxdb_data_stream_type

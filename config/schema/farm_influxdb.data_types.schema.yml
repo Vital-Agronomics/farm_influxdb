@@ -28,3 +28,11 @@ farm_influxdb_server:
     timeout:
       type: integer
       lable: 'Timeout'
+
+farm_influxdb_data_stream_type:
+  type: mapping
+  label: 'Influxdb data stream type settings'
+  mapping:
+    server_id:
+      type: string
+      label: 'ID of the Influxdb server to use.'
