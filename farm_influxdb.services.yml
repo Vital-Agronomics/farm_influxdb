@@ -1,0 +1,4 @@
+services:
+  farm_influxdb.influxdb_server_client_factory:
+    class: Drupal\farm_influxdb\InfluxdbServerClientFactory
+    arguments: [ '@config.factory']
