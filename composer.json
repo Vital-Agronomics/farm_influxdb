@@ -1,5 +1,5 @@
 {
-    "name": "Vital-Agronomics/farm_influxdb",
+    "name": "vital-agronomics/farm_influxdb",
     "description": "Integrates farmOS data streams with infuxdb.",
     "type": "drupal-module",
     "homepage": "https://github.com/vital-agronomics/farm_influxdb",
