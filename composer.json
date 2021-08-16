@@ -1,0 +1,13 @@
+{
+    "name": "Vital-Agronomics/farm_influxdb",
+    "description": "Integrates farmOS data streams with infuxdb.",
+    "type": "drupal-module",
+    "homepage": "https://github.com/vital-agronomics/farm_influxdb",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Paul Weidner",
+            "email": "paul.weidner@gmail.com"
+        }
+    ]
+}
