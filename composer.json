@@ -9,5 +9,8 @@
             "name": "Paul Weidner",
             "email": "paul.weidner@gmail.com"
         }
-    ]
+    ],
+    "require": {
+        "influxdata/influxdb-client-php": "^2.3"
+    }
 }
