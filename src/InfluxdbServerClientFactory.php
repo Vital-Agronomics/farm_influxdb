@@ -93,7 +93,7 @@ class InfluxdbServerClientFactory implements ContainerInjectionInterface {
   /**
    * Create an InfluxdbServerClietn from a given data stream type ID.
    *
-   * @param string $data_stream_type
+   * @param string $data_stream_type_id
    *   The data stream type ID.
    * @param array $options
    *   Optional client options. These will override the server config.
@@ -101,8 +101,13 @@ class InfluxdbServerClientFactory implements ContainerInjectionInterface {
    * @return \Drupal\farm_influxdb\InfluxdbServerClient
    *   The Influxdb client.
    */
-  public function createClientFromDataStreamType(string $data_stream_type, array $options = []): InfluxdbServerClient {
-    $data_stream_type = DataStreamType::load($data_stream_type);
+  public function createClientFromDataStreamType(string $data_stream_type_id, array $options = []): InfluxdbServerClient {
+
+    // Load the data stream type.
+    $data_stream_type = DataStreamType::load($data_stream_type_id);
+    if (empty($data_stream_type)) {
+      throw new \Exception("The $data_stream_type_id data stream type does not exist.");
+    }
 
     // Get the configured server_id.
     $server_id = $data_stream_type->getThirdPartySetting(static::THIRD_PARTY_PROVIDER, 'server_id');
