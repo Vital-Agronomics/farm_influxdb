@@ -5,6 +5,7 @@ namespace Drupal\farm_influxdb;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\data_stream\Entity\DataStreamInterface;
+use Drupal\data_stream\Entity\DataStreamType;
 use Drupal\farm_influxdb\Form\InfluxdbSettingsForm;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -86,6 +87,22 @@ class InfluxdbServerClientFactory implements ContainerInjectionInterface {
 
     /** @var \Drupal\data_stream\Entity\DataStreamTypeInterface $data_stream_type */
     $data_stream_type = $data_stream->get('type')->entity;
+    return $this->createClientFromDataStreamType($data_stream_type->id(), $options);
+  }
+
+  /**
+   * Create an InfluxdbServerClietn from a given data stream type ID.
+   *
+   * @param string $data_stream_type
+   *   The data stream type ID.
+   * @param array $options
+   *   Optional client options. These will override the server config.
+   *
+   * @return \Drupal\farm_influxdb\InfluxdbServerClient
+   *   The Influxdb client.
+   */
+  public function createClientFromDataStreamType(string $data_stream_type, array $options = []): InfluxdbServerClient {
+    $data_stream_type = DataStreamType::load($data_stream_type);
 
     // Get the configured server_id.
     $server_id = $data_stream_type->getThirdPartySetting(static::THIRD_PARTY_PROVIDER, 'server_id');
