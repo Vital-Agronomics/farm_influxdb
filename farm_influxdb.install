@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for farm_influxdb.module.
+ */
+
+use Drupal\data_stream\Entity\DataStreamType;
+
+/**
+ * Implements hook_requirements().
+ */
+function farm_influxdb_requirements($phase) {
+  $requirements = [];
+
+  // Only perform runtime checks.
+  if ($phase == 'runtime') {
+
+    /** @var \Drupal\farm_influxdb\InfluxdbServerClientFactory $client_factory */
+    $client_factory = \Drupal::service('farm_influxdb.influxdb_server_client_factory');
+
+    // Ensure that data stream types with a farm_influxdb server setting
+    // are properly configured.
+    $data_stream_types = DataStreamType::loadMultiple();
+    foreach ($data_stream_types as $data_stream_type) {
+
+      // Only check if it has the farm_influxdb.server_id setting.
+      if ($server_id = $data_stream_type->getThirdPartySetting('farm_influxdb', 'server_id')) {
+        $data_stream_type_id = $data_stream_type->id();
+
+        // Try to instantiate a client.
+        try {
+          $client_factory->createClientFromDataStreamType($data_stream_type_id);
+          $requirements[$data_stream_type_id . '_influx_client'] = [
+            'title' => t('Influx client: @data_stream_type data stream', ['@data_stream_type' => $data_stream_type->label()]),
+            'value' => t('The influx client ID %server_id is configured correctly.', ['%server_id' => $server_id]),
+            'severity' => REQUIREMENT_OK,
+          ];
+        }
+        // Catch errors.
+        catch (Exception $e) {
+          $requirements[$data_stream_type_id . '_influx_client'] = [
+            'title' => t('Influx client: @data_stream_type data stream', ['@data_stream_type' => $data_stream_type->label()]),
+            'value' => t('Influx client error: %error', ['%error' => $e->getMessage()]),
+            'severity' => REQUIREMENT_ERROR,
+          ];
+        }
+      }
+    }
+  }
+
+  return $requirements;
+}
