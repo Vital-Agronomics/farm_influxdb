@@ -91,7 +91,7 @@ class InfluxdbServerClientFactory implements ContainerInjectionInterface {
   }
 
   /**
-   * Create an InfluxdbServerClietn from a given data stream type ID.
+   * Create an InfluxdbServerClient from a given data stream type ID.
    *
    * @param string $data_stream_type_id
    *   The data stream type ID.
