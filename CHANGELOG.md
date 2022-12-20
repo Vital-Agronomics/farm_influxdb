@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Use ping method in test server form.
+
 ### Changed
 
 - Bump influxdata/influxdb-client-php to ^3

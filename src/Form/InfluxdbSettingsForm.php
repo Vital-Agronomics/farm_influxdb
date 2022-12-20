@@ -226,13 +226,26 @@ class InfluxdbSettingsForm extends ConfigFormBase {
     $test_server = $servers[$delta];
 
     // Try and query the organizations on the server.
-    // The $client->health() method only works for OSS, not influx cloud.
     $client = new InfluxdbServerClient($test_server);
-    $org_service = $client->createService(OrganizationsService::class);
     try {
+
+      // Try pinging the server.
+      $result = $client->ping();
+      $this->messenger()->addMessage($this->t(
+        '@server_name (@server_id) server info: Version: %version, Build: %build',
+        [
+          '@server_name' => $test_server['label'],
+          '@server_id' => $test_server['id'],
+          '%version' => join(',', $result['x-influxdb-version']),
+          '%build' => join(',', $result['x-influxdb-build']),
+        ]
+      ));
+
+      // Query orgs.
+      $org_service = $client->createService(OrganizationsService::class);
       $org_service->getOrgs()->getOrgs();
       $this->messenger()->addMessage($this->t(
-        '@server_name (@server_id): success',
+        '@server_name (@server_id): Authentication success',
         [
           '@server_name' => $test_server['label'],
           '@server_id' => $test_server['id'],
