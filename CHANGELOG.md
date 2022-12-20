@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Bump influxdata/influxdb-client-php to ^3
+
 ## 1.0.0 08/08/2022
 
 Initial release!
